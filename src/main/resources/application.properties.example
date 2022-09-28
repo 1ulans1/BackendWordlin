@@ -1,0 +1,13 @@
+# logback properties
+logging.file.name=logs/spring-boot-logging.log
+logging.logback.rollingpolicy.max-history=7
+logging.logback.rollingpolicy.max-file-size=1MB
+logging.logback.rollingpolicy.total-size-cap=10MB
+
+# Postgres ec2
+spring.jpa.database=POSTGRESQL
+spring.sql.init.platform=postgres
+spring.datasource.url=jdbc:postgresql://localhost:5432/forTest
+spring.datasource.username=postgres
+spring.datasource.password=12131719
+spring.jpa.properties.hibernate.jdbc.l=ob.non_contextual_creation=true
