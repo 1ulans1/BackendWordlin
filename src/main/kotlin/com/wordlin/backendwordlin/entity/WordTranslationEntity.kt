@@ -16,5 +16,8 @@ data class WordTranslationEntity(
         joinColumns = [JoinColumn(name = "word_id")],
         inverseJoinColumns = [JoinColumn(name = "translation_id")]
     )
-    var translation: Set<WordEntity> = HashSet()
+    var translation: Set<WordEntity>,
+
+    @ManyToMany(mappedBy = "wordTranslation")
+    var wordSet: List<WordSet>
 )
