@@ -4,8 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-
-class UserDetailsImpl(user: UserEntity) : UserDetails {
+class UserDetailsImpl(user: User) : UserDetails {
     private val username: String
     private val password: String
     private val rolesAndAuthorities: List<GrantedAuthority>
@@ -28,7 +27,6 @@ class UserDetailsImpl(user: UserEntity) : UserDetails {
         return username
     }
 
-    // 4 remaining methods that just return true
     override fun isAccountNonExpired(): Boolean {
         return true
     }

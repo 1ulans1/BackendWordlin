@@ -1,6 +1,6 @@
 package com.wordlin.backendwordlin.controller
 
-import com.wordlin.backendwordlin.entity.UserEntity
+import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.service.TokenService
 import com.wordlin.backendwordlin.service.UserService
 import org.slf4j.LoggerFactory
@@ -27,7 +27,7 @@ class AuthController(
     }
 
     @PostMapping("/signup")
-    fun signup(@RequestBody user: UserEntity): UserEntity {
+    fun signup(@RequestBody user: User): User {
         return userService.addUser(user)
     }
 }
