@@ -1,6 +1,7 @@
 package com.wordlin.backendwordlin.service
 
 import com.wordlin.backendwordlin.entity.User
+import com.wordlin.backendwordlin.exeption.UserNotFoundException
 import com.wordlin.backendwordlin.exeption.UserStatusSetException
 import com.wordlin.backendwordlin.repostitory.UserRepository
 import org.springframework.stereotype.Service
@@ -20,6 +21,6 @@ class UserService(
     }
 
     fun getUserByEmail(email: String): User {
-        return repository.getByEmail(email)!!
+        return repository.getByEmail(email) ?: throw UserNotFoundException()
     }
 }

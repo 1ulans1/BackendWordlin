@@ -11,15 +11,15 @@ data class TranslationSet(
     var id: Long? = null,
     var publicName: String,
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.PERSIST])
     @JoinTable(
         name = "words_translation",
         joinColumns = [JoinColumn(name = "set_id")],
         inverseJoinColumns = [JoinColumn(name = "translation_id")]
     )
-    var translations: List<Translation?>? = null,
+    var translations: List<Translation> = emptyList(),
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var publicSet: Boolean = false,
 ) {
 

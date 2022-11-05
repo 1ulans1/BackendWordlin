@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/wordSet")
+@RequestMapping("/word")
 class TranslationController(
     private val translateService: TranslateService
 ) {
@@ -15,12 +15,12 @@ class TranslationController(
         return translateService.addWordTranslation(translation)
     }
 
-    @GetMapping("/getAllByUserLanguages")
+    @GetMapping("/allByUserLanguages")
     fun getAllByUserLanguages(principal: Principal): List<Translation> {
         return translateService.getAllByLanguage(principal.name)
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     fun getAllByUserLanguages(): List<Translation> {
         return translateService.getAll()
     }
