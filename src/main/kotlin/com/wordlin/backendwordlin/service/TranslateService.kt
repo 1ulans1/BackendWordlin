@@ -1,6 +1,7 @@
 package com.wordlin.backendwordlin.service
 
 import com.wordlin.backendwordlin.entity.Translation
+import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.exeption.UserNotAssignLanguagesException
 import com.wordlin.backendwordlin.exeption.UserNotFoundException
 import com.wordlin.backendwordlin.repostitory.UserRepository
@@ -41,5 +42,13 @@ class TranslateService(
 
     fun getAll(): List<Translation> {
         return wordTranslationRepository.findAll()
+    }
+
+    fun removeUserTranslation(id: Long, words: List<Translation>): User {
+        TODO("Not yet implemented")
+    }
+
+    fun get(id: Long): Translation {
+        return wordTranslationRepository.findById(id).orElseThrow()
     }
 }

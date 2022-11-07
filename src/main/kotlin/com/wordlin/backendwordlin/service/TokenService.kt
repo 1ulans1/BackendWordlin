@@ -24,7 +24,7 @@ class TokenService(
         val claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
-            .expiresAt(now.plus(1, ChronoUnit.HOURS))
+            .expiresAt(now.plus(1, ChronoUnit.DAYS))
             .subject(authentication.name)
             .claim("scope", scope)
             .build()

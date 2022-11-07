@@ -14,13 +14,13 @@ data class User(
     var email: String,
     var password: String,
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.PERSIST])
     @JoinTable(
         name = "user_translationSet",
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "translation_set_id")]
     )
-    var translationSet: List<TranslationSet?>? = emptyList(),
+    var translationSet: List<TranslationSet> = emptyList(),
     var nativeLanguage: Language? = null,
     var targetLanguage: Language? = null,
 ) {
