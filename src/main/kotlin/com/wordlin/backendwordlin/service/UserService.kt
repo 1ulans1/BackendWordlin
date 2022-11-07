@@ -1,5 +1,6 @@
 package com.wordlin.backendwordlin.service
 
+import com.wordlin.backendwordlin.entity.TranslationSet
 import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.exeption.UserNotFoundException
 import com.wordlin.backendwordlin.exeption.UserStatusSetException
@@ -22,5 +23,9 @@ class UserService(
 
     fun getUserByEmail(email: String): User {
         return repository.getByEmail(email) ?: throw UserNotFoundException()
+    }
+
+    fun existsByIdAndTranslationSet(email: String, translationSet: TranslationSet): Boolean {
+        return repository.existsByEmailAndTranslationSet(email, translationSet)
     }
 }

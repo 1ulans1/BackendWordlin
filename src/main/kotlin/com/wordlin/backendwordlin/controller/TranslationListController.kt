@@ -1,5 +1,6 @@
 package com.wordlin.backendwordlin.controller
 
+import com.wordlin.backendwordlin.entity.Translation
 import com.wordlin.backendwordlin.entity.TranslationSet
 import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.service.TranslationSetService
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
-import java.util.LinkedList
 
 @RestController
 @RequestMapping("/translationLists")
@@ -36,6 +36,21 @@ class TranslationListController(
     @PostMapping("/addTranslationSet")
     fun addUserWords(principal: Principal, @RequestBody words: List<TranslationSet>): User {
         return translationSetService.addUserTranslation(principal.name, words)
+    }
+
+    @PostMapping("/removeTranslationSet")
+    fun removeUserWords(principal: Principal, @RequestBody words: List<TranslationSet>): User {
+        return translationSetService.removeUserTranslationSet(principal.name, words)
+    }
+
+    @PostMapping("/removeTranslation/{id}")
+    fun removeUserWords(@PathVariable id: Long, @RequestBody words: List<Translation>): TranslationSet {
+        return translationSetService.removeUserTranslation(id, words)
+    }
+
+    @PostMapping("/editTranslation/{id}")
+    fun editUserWords(@PathVariable id: Long, @RequestBody words: List<Translation>): TranslationSet {
+        return translationSetService.editUserTranslation(id, words)
     }
 
     @GetMapping("/allPublic")

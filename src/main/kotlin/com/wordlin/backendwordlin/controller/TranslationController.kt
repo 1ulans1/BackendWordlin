@@ -1,6 +1,8 @@
 package com.wordlin.backendwordlin.controller
 
 import com.wordlin.backendwordlin.entity.Translation
+import com.wordlin.backendwordlin.entity.TranslationSet
+import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.service.TranslateService
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -23,5 +25,10 @@ class TranslationController(
     @GetMapping("/all")
     fun getAllByUserLanguages(): List<Translation> {
         return translateService.getAll()
+    }
+
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: Long): Translation {
+        return translateService.get(id)
     }
 }

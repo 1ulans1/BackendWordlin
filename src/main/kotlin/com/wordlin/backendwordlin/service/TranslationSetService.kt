@@ -1,5 +1,6 @@
 package com.wordlin.backendwordlin.service
 
+import com.wordlin.backendwordlin.entity.Translation
 import com.wordlin.backendwordlin.entity.TranslationSet
 import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.exeption.WordSetNotFoundException
@@ -46,5 +47,47 @@ class TranslationSetService(
         println(userTranslations)
         user.translationSet = union.onEach { translationSetRepository.save(it) }
         return userService.addUser(user)
+    }
+
+    @Transactional
+    fun removeUserTranslationSet(name: String, translationSets: List<TranslationSet>): User {
+        val user = userService.getUserByEmail(name)
+
+        val userTranslations = user.translationSet as MutableList
+
+        val setId = translationSets.map { it.id!! }
+
+        userTranslations.removeIf { setId.contains(it.id) }
+
+        return userService.addUser(user)
+    }
+
+    fun removeUserTranslation(id: Long, translations: List<Translation>): TranslationSet {
+
+        val translationSet = translationSetRepository.findById(id).orElseThrow()
+
+        val translationsOld = translationSet.translations as MutableList
+
+        val setId = translations.map { it.id!! }
+
+        translationsOld.removeIf { setId.contains(it.id) }
+
+        return translationSetRepository.save(translationSet)
+
+    }
+
+    fun editUserTranslation(id: Long, translations: List<Translation>): TranslationSet {
+
+        val translationSet = translationSetRepository.findById(id).orElseThrow()
+
+        val translationsOld = translationSet.translations as MutableList
+
+        translationSet.translations = translationsOld.map { it1 ->
+            translations.find {
+                it1.id == it.id
+            } ?: it1
+        }
+
+        return translationSetRepository.save(translationSet)
     }
 }
