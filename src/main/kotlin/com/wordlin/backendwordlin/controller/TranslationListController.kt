@@ -19,8 +19,8 @@ class TranslationListController(
 ) {
 
     @PostMapping("/add")
-    fun addWordSet(@RequestBody translationSet: TranslationSet): TranslationSet {
-        return translationSetService.addTranslationSet(translationSet)
+    fun addWordSet(principal: Principal, @RequestBody translationSet: TranslationSet): TranslationSet {
+        return translationSetService.addTranslationSet(principal.name, translationSet)
     }
 
     @GetMapping("/{id}")
@@ -44,8 +44,12 @@ class TranslationListController(
     }
 
     @PostMapping("/removeTranslation/{id}")
-    fun removeUserWords(@PathVariable id: Long, @RequestBody words: List<Translation>): TranslationSet {
-        return translationSetService.removeUserTranslation(id, words)
+    fun removeUserWords(
+        principal: Principal,
+        @PathVariable id: Long,
+        @RequestBody words: List<Translation>
+    ): TranslationSet {
+        return translationSetService.removeUserTranslation(principal.name, id, words)
     }
 
     @PostMapping("/editTranslation/{id}")
