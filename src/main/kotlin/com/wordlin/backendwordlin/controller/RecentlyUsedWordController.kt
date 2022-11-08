@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @RestController
 @RequestMapping("recentlyUsedWord")
@@ -17,8 +18,8 @@ class RecentlyUsedWordController(
 ) {
 
     @PostMapping("add")
-    fun add(@RequestBody recentlyUsedWord: RecentlyUsedWord) {
-        return recentlyUsedWordService.add(recentlyUsedWord)
+    fun add(@RequestBody recentlyUsedWord: RecentlyUsedWord): RecentlyUsedWord {
+        return recentlyUsedWordService.saveIfNotExist(recentlyUsedWord)!!
     }
 
     @GetMapping("{id}")
@@ -26,5 +27,18 @@ class RecentlyUsedWordController(
         return recentlyUsedWordService.get(id)
     }
 
+    @GetMapping("/getOld")
+    fun get(principal: Principal): RecentlyUsedWord {
+        return recentlyUsedWordService.findWord(principal.name);
+    }
 
+    @PostMapping("/updateTime/{idWord}")
+    fun updateTime(@PathVariable idWord: Long): RecentlyUsedWord {
+        return recentlyUsedWordService.updateTime(idWord);
+    }
+
+    @PostMapping("/updateLevel/{id}")
+    fun updateLevel(@PathVariable id: Long): RecentlyUsedWord {
+        return recentlyUsedWordService.updateLevel(id)
+    }
 }

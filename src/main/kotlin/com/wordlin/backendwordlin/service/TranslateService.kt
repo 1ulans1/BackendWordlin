@@ -1,5 +1,6 @@
 package com.wordlin.backendwordlin.service
 
+import com.wordlin.backendwordlin.entity.RecentlyUsedWord
 import com.wordlin.backendwordlin.entity.Translation
 import com.wordlin.backendwordlin.entity.User
 import com.wordlin.backendwordlin.exeption.UserNotAssignLanguagesException
@@ -13,10 +14,11 @@ import org.springframework.stereotype.Service
 class TranslateService(
     private val wordRepository: WordRepository,
     private val userRepository: UserRepository,
+    private val recentlyUsedWordService: RecentlyUsedWordService,
     private val wordTranslationRepository: WordTranslationRepository
 ) {
 
-    fun addWordTranslation(translation: Translation): Translation {
+    fun addWordTranslation(name: String, translation: Translation): Translation {
 
         translation.word = wordRepository.findWordEntityByWord(
             translation.word.word
@@ -24,11 +26,15 @@ class TranslateService(
             translation.word
         )
 
+        val user = userRepository.getByEmail(name)!!
+
         translation.translation = translation.translation.map {
             wordRepository.findWordEntityByWord(it.word) ?: wordRepository.save(it)
         }
 
-        return wordTranslationRepository.save(translation)
+        val save = wordTranslationRepository.save(translation)
+        recentlyUsedWordService.saveIfNotExist(RecentlyUsedWord(user = user, translation = translation))
+        return save
     }
 
     fun getAllByLanguage(email: String): List<Translation> {

@@ -1,5 +1,6 @@
 package com.wordlin.backendwordlin.service
 
+import com.wordlin.backendwordlin.entity.RecentlyUsedWord
 import com.wordlin.backendwordlin.entity.Translation
 import com.wordlin.backendwordlin.entity.TranslationSet
 import com.wordlin.backendwordlin.entity.User
@@ -13,11 +14,13 @@ import kotlin.jvm.optionals.getOrElse
 class TranslationSetService(
     private val translationSetRepository: TranslationSetRepository,
     private val userService: UserService,
+    private val recentlyUsedWordService: RecentlyUsedWordService,
     private val translationService: TranslateService
 ) {
 
-    fun addTranslationSet(translationSet: TranslationSet): TranslationSet {
-        translationSet.translations = translationSet.translations.onEach { translationService.addWordTranslation(it) }
+    fun addTranslationSet(name: String, translationSet: TranslationSet): TranslationSet {
+        translationSet.translations =
+            translationSet.translations.onEach { translationService.addWordTranslation(name, it) }
         return translationSetRepository.save(translationSet)
     }
 
@@ -44,25 +47,42 @@ class TranslationSetService(
         set2.forEach { (id) -> union.removeIf { (id1): TranslationSet -> id1 == id } }
         union.addAll(set2)
 
+        set2.forEach {
+            it.translations.forEach { translation ->
+                recentlyUsedWordService.add(RecentlyUsedWord(user = user, translation = translation))
+            }
+        }
+
         println(userTranslations)
         user.translationSet = union.onEach { translationSetRepository.save(it) }
         return userService.addUser(user)
     }
 
     @Transactional
-    fun removeUserTranslationSet(name: String, translationSets: List<TranslationSet>): User {
-        val user = userService.getUserByEmail(name)
+    fun removeUserTranslationSet(email: String, translationSets: List<TranslationSet>): User {
+        val user = userService.getUserByEmail(email)
 
         val userTranslations = user.translationSet as MutableList
 
         val setId = translationSets.map { it.id!! }
 
-        userTranslations.removeIf { setId.contains(it.id) }
+        userTranslations.removeIf { translationSet ->
+            (setId.contains(translationSet.id)).also {
+                if (it) {
+                    translationSet.translations.forEach { translation ->
+                        recentlyUsedWordService.remove(user, translation)
+                    }
+                }
+            }
+        }
 
         return userService.addUser(user)
     }
 
-    fun removeUserTranslation(id: Long, translations: List<Translation>): TranslationSet {
+    @Transactional
+    fun removeUserTranslation(email: String, id: Long, translations: List<Translation>): TranslationSet {
+
+        val user = userService.getUserByEmail(email)
 
         val translationSet = translationSetRepository.findById(id).orElseThrow()
 
@@ -70,7 +90,13 @@ class TranslationSetService(
 
         val setId = translations.map { it.id!! }
 
-        translationsOld.removeIf { setId.contains(it.id) }
+        translationsOld.removeIf { translation ->
+            setId.contains(translation.id).also {
+                if (it) {
+                    recentlyUsedWordService.remove(user, translation)
+                }
+            }
+        }
 
         return translationSetRepository.save(translationSet)
 

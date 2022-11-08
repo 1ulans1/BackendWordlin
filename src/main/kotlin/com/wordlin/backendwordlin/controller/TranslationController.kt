@@ -13,8 +13,8 @@ class TranslationController(
     private val translateService: TranslateService
 ) {
     @PostMapping("/add")
-    fun addWordTranslate(@RequestBody translation: Translation): Translation {
-        return translateService.addWordTranslation(translation)
+    fun addWordTranslate(principal: Principal, @RequestBody translation: Translation): Translation {
+        return translateService.addWordTranslation(principal.name, translation)
     }
 
     @GetMapping("/allByUserLanguages")
