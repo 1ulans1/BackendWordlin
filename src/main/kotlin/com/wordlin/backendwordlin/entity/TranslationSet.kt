@@ -19,7 +19,6 @@ data class TranslationSet(
     )
     var translations: List<Translation> = emptyList(),
 
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var publicSet: Boolean = false,
 ) {
 
