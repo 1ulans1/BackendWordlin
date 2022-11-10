@@ -23,6 +23,11 @@ class TranslationListController(
         return translationSetService.addTranslationSet(principal.name, translationSet)
     }
 
+    @PostMapping("/addPublic")
+    fun addWordSet(@RequestBody translationSet: TranslationSet): TranslationSet {
+        return translationSetService.addPublicTranslationSet(translationSet)
+    }
+
     @GetMapping("/{id}")
     fun addWordSet(@PathVariable id: Long): TranslationSet {
         return translationSetService.get(id)

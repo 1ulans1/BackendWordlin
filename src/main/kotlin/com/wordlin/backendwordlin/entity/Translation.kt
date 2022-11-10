@@ -11,8 +11,8 @@ data class Translation(
     var id: Long?,
     @OneToOne(cascade = [CascadeType.PERSIST])
     var word: Word,
-    var nativeLanguage: Language,
-    var targetLanguage: Language,
+    var nativeLanguage: Language = Language.UK,
+    var targetLanguage: Language = Language.EN,
 
     @ManyToMany(cascade = [CascadeType.PERSIST])
     @JoinTable(

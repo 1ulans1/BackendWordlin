@@ -11,11 +11,12 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface RecentlyUsedWordRepository : JpaRepository<RecentlyUsedWord, Long> {
-
     fun existsByUserAndTranslation(user: User, translation: Translation): Boolean
-    fun findAllByUserAndLevel(user: User, level: Long): List<RecentlyUsedWord>
-    fun findAllByUser(user: User): List<RecentlyUsedWord>
-    fun findRecentlyUsedWordById(id: Long): RecentlyUsedWord?
 
+    fun findAllByUserAndLevel(user: User, level: Long): List<RecentlyUsedWord>
+
+    fun findAllByUser(user: User): List<RecentlyUsedWord>
+
+    fun findRecentlyUsedWordById(id: Long): RecentlyUsedWord?
     fun deleteByUserAndTranslation(user: User, translation: Translation): Int
 }

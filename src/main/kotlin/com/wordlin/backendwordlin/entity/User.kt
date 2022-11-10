@@ -21,8 +21,8 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "translation_set_id")]
     )
     var translationSet: List<TranslationSet> = emptyList(),
-    var nativeLanguage: Language? = null,
-    var targetLanguage: Language? = null,
+    var nativeLanguage: Language? = Language.UK,
+    var targetLanguage: Language? = Language.EN,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
