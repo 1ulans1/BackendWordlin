@@ -11,6 +11,5 @@ interface UserRepository : JpaRepository<User, Long> {
     @Query("select u from User u where u.email = ?1")
     fun getByEmail(email: String): User?
 
-    @Query("select (count(u) > 0) from User u where u.email = ?1 and u.translationSet = ?2")
     fun existsByEmailAndTranslationSet(email: String, translationSet: TranslationSet): Boolean
 }

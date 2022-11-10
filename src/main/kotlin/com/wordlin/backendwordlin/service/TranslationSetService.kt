@@ -116,4 +116,8 @@ class TranslationSetService(
 
         return translationSetRepository.save(translationSet)
     }
+
+    fun addPublicTranslationSet(translationSet: TranslationSet): TranslationSet {
+        return translationSetRepository.save(translationSet)
+    }
 }
